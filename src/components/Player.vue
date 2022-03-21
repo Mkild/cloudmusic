@@ -68,7 +68,7 @@
           <div class="left">
             <Comments :id="currentSong.id" ref="comments" v-if="currentSong.id" />
           </div>
-          <div class="right">
+          <div class="right" v-if="simiPlaylists.concat(simiSongs).length">
             <Loading :loading="simiLoading" v-if="simiLoading" />
             <div v-else>
               <div class="simi-playlists" v-if="simiPlaylists.length">
