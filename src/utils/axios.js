@@ -6,7 +6,7 @@ import store from '@/store'
 const isProd = process.env.NODE_ENV === 'production'
 // 备用：https://netease-cloud-music-api-mkild.vercel.app/
 let BASE_URL = 'http://106.55.228.168:3000/'
-if (isProd) BASE_URL = 'http://106.55.228.168:3000/backend/'
+if (isProd) BASE_URL = '/backend/'
 // 不带全局loading的请求实例
 export const requestWithoutLoading = createBaseInstance()
 
