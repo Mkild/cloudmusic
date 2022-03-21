@@ -162,6 +162,8 @@
     display: flex;
     justify-content: center;
     padding-top: 60px;
+    margin-left: 20px;
+    margin-right: 200px;
 
     .text {
       display: flex;
