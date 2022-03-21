@@ -31,7 +31,7 @@
         <div class="right">
           <p class="title">相关推荐</p>
           <div class="simi-mvs">
-            <Card
+            <BigCard
               :desc="`by ${simiMv.artistName}`"
               :key="simiMv.id"
               :name="simiMv.name"
@@ -39,10 +39,10 @@
               class="simi-mv-card"
               v-for="simiMv in simiMvs"
             >
-              <template #img-wrap>
+              <template v-slot:img-wrap>
                 <MvCard :duration="simiMv.duration" :img="simiMv.cover" :playCount="simiMv.playCount" :iconSize="38" />
               </template>
-            </Card>
+            </BigCard>
           </div>
         </div>
       </div>
