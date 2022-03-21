@@ -28,8 +28,6 @@ npm install  / yarn
 npm run serve  / yarn serve
 # 打包
 npm run build  / yarn build
-# 本地预览打包后的dist文件
-npm run preview / yarn preview
 
 ```
 
