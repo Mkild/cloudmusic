@@ -68,10 +68,10 @@
           <div class="left">
             <Comments :id="currentSong.id" ref="comments" v-if="currentSong.id" />
           </div>
-          <div class="right" v-show="simiPlaylists.concat(simiSongs).length">
+          <div class="right" v-if="simiPlaylists.length || simiSongs.length">
             <Loading :loading="simiLoading" v-if="simiLoading" />
             <div v-else>
-              <div class="simi-playlists" v-show="simiPlaylists.length">
+              <div class="simi-playlists" v-if="simiPlaylists.length">
                 <p class="title">包含这首歌的歌单</p>
                 <div :key="simiPlaylist.id" class="simi-item" v-for="simiPlaylist in simiPlaylists">
                   <Card
