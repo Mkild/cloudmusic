@@ -2,6 +2,7 @@
   <div @click="onClick" class="horizontal-card">
     <div class="img-wrap">
       <img v-lazy="$utils.genImgUrl(img, 50)" />
+      <slot name="img-wrap"></slot>
       <slot name="img-mask"></slot>
     </div>
     <div class="content">
