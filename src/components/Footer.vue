@@ -9,7 +9,7 @@
 
       <!-- 右侧区域 -->
       <div class="right">
-        <a href="https://github.com/Mkild" target="_blank"><Icon :size="40" type="github" /></a>
+        <a href="https://github.com/Mkild/cloudmusic" target="_blank"><Icon :size="40" type="github" /></a>
         <a href="mailto:1427756365@qq.com" target="_blank"><Icon :size="40" type="email" /></a>
         <img src="@/assets/image/buwan-project.png" />
       </div>

@@ -1,5 +1,9 @@
 # Cloud Music
 
+<p align="center">
+    <img src="https://i.imgur.com/kS9CsLP.png" alt="cloudmusic" />
+</p>
+
 > **Cloud Music 网易云音乐**
 >
 > 基于 Vue2、Vue-cli、Element-UI 的仿网易云音乐 | Cloud Music based on Vue 2 + Vue-cli + Element-UI
@@ -8,7 +12,7 @@
 
 ## 简介
 
-一个平平无奇的低仿网易云，功能有待完善。
+一个平平无奇的低仿网易云，功能有待补完。
 
 > **项目预览（部署在 Vercel 上，速度较慢）：** [cloudmusic](https://cloudmusic-mkild.vercel.app/)
 
