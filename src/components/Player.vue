@@ -1,0 +1,647 @@
+<template>
+  <transition name="slide">
+    <div v-if="hasCurrentSong" :class="getPlayerShowCls()" class="player">
+      <div class="background"><img :src="$utils.genImgUrl(currentSong.img, 400)" /></div>
+      <div class="content">
+        <div class="song">
+          <div class="left">
+            <img class="play-bar-support" src="@/assets/image/play-bar-support.png" />
+            <img :class="{ playing }" class="play-bar" src="@/assets/image/play-bar.png" />
+            <div class="img-outer-border" ref="disc">
+              <div :class="{ paused: !playing }" class="img-outer" ref="discRotate">
+                <div class="img-wrap">
+                  <img v-lazy="$utils.genImgUrl(currentSong.img, 400)" />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="right">
+            <div class="name-wrap">
+              <PlayerMarquee v-show="isMarqueeOpen" class="marquee-name" :text="currentSong.name"></PlayerMarquee>
+              <p v-show="!isMarqueeOpen" class="name">{{ currentSong.name }}</p>
+              <div class="icon-wrap">
+                <Icon v-if="currentSong.fl === 0" class="vip-icon" type="vip" color="red" :size="20" />
+                <Icon v-if="currentSong.fl === 320000" class="hq-icon" type="hq" color="theme" :size="20" />
+                <Icon @click="onGoMv" v-if="currentSong.mvId" class="mv-icon" type="mv01" color="theme" :size="20" />
+              </div>
+            </div>
+            <div class="alia" v-show="currentSong.alia">{{ currentSong.alia }}</div>
+            <div class="desc">
+              <div class="desc-item">
+                <div class="artists" :title="currentSong.artistsText">{{ currentSong.artistsText }}</div>
+                <span>&nbsp;-&nbsp;</span>
+                <div v-show="currentSong.albumName" class="album" :title="currentSong.albumName">
+                  {{ currentSong.albumName }}
+                </div>
+                <span v-show="!currentSong.albumName">未知</span>
+              </div>
+            </div>
+            <empty v-if="nolyric">还没有歌词哦~</empty>
+            <empty v-if="!nolyric && justmusic">纯音乐，请欣赏</empty>
+            <Scroller
+              :data="lyric"
+              :options="{ disableTouch: true }"
+              @init="onInitScroller"
+              class="lyric-wrap"
+              ref="scroller"
+              v-else
+            >
+              <div>
+                <div class="lyric-block"></div>
+                <div
+                  :class="getActiveCls(index)"
+                  :key="index"
+                  class="lyric-item"
+                  ref="lyric"
+                  v-for="(l, index) in lyricWithTranslation"
+                >
+                  <p :key="contentIndex" class="lyric-text" v-for="(content, contentIndex) in l.contents">
+                    {{ content }}
+                  </p>
+                </div>
+                <div class="lyric-block"></div>
+              </div>
+            </Scroller>
+          </div>
+        </div>
+        <div class="bottom">
+          <div class="left">
+            <Comments :id="currentSong.id" ref="comments" v-if="currentSong.id" />
+          </div>
+          <div class="right" v-if="simiPlaylists.concat(simiSongs).length">
+            <Loading :loading="simiLoading" v-if="simiLoading" />
+            <div v-else>
+              <div class="simi-playlists" v-if="simiPlaylists.length">
+                <p class="title">包含这首歌的歌单</p>
+                <div :key="simiPlaylist.id" class="simi-item" v-for="simiPlaylist in simiPlaylists">
+                  <Card
+                    :img="simiPlaylist.coverImgUrl"
+                    :name="simiPlaylist.name"
+                    @click="onClickPlaylist(simiPlaylist.id)"
+                  >
+                    <template v-slot:desc>
+                      <div class="desc">
+                        <Icon :size="12" color="shallow" type="play" />
+                        <p class="count">{{ $utils.formatNumber(simiPlaylist.playCount) }}</p>
+                      </div>
+                    </template>
+                  </Card>
+                </div>
+              </div>
+              <div class="simi-songs" v-if="simiSongs.length">
+                <p class="title">喜欢这首歌的人也听</p>
+                <div :key="simiSong.id" class="simi-item" v-for="simiSong in simiSongs">
+                  <Card
+                    :desc="simiSong.artistsText"
+                    :img="simiSong.img"
+                    :name="simiSong.name"
+                    @click="onClickSong(simiSong)"
+                  >
+                    <template v-slot:img-mask>
+                      <PlayIcon class="play-icon" />
+                    </template>
+                  </Card>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 返回顶部 -->
+      <GoTop />
+    </div>
+  </transition>
+</template>
+
+<script>
+  import { getLyric, getSimiSongs, getSimiPlaylists } from '@/api'
+  import lyricParser from '@/utils/lrcparse'
+  import { debounce, isDef, createSong, goMvWithCheck } from '@/utils'
+  import Comments from '@/components/Comments'
+  import { mapState, mapMutations, mapActions, mapGetters } from '@/store/helper/music'
+
+  const WHEEL_TYPE = 'wheel'
+  const SCROLL_TYPE = 'scroll'
+  // 恢复自动滚动的定时器时间
+  const AUTO_SCROLL_RECOVER_TIME = 1000
+
+  export default {
+    name: 'Player',
+    components: { Comments },
+    created() {
+      this.lyricScrolling = {
+        [WHEEL_TYPE]: false,
+        [SCROLL_TYPE]: false,
+      }
+      this.lyricTimer = {
+        [WHEEL_TYPE]: null,
+        [SCROLL_TYPE]: null,
+      }
+    },
+    data() {
+      return {
+        lyric: [],
+        tlyric: [],
+        simiLoading: false,
+        simiPlaylists: [],
+        simiSongs: [],
+        nolyric: false,
+        justmusic: false,
+      }
+    },
+    mounted() {
+      if (this.hasCurrentSong) this.updateLyric()
+    },
+    methods: {
+      async updateSong() {
+        this.updateLyric()
+        this.updateSimi()
+      },
+      async updateLyric() {
+        const result = await getLyric(this.currentSong.id)
+        this.nolyric = !isDef(result.lrc) || !result.lrc.lyric
+        let str = result.lrc.lyric
+        let reg = /[\u4e00-\u9fa5]+/g
+        let arr = str.match(reg)
+        let last = arr[arr.length - 2]
+        if (last === '纯音乐') {
+          this.justmusic = true
+        } else {
+          this.justmusic = false
+        }
+        if (!this.nolyric && !this.justmusic) {
+          const { lyric, tlyric } = lyricParser(result)
+          this.lyric = lyric
+          this.tlyric = tlyric
+        }
+      },
+      async updateSimi() {
+        this.simiLoading = true
+        const [simiPlaylists, simiSongs] = await Promise.all([
+          getSimiPlaylists(this.currentSong.id),
+          getSimiSongs(this.currentSong.id),
+        ]).finally(() => {
+          this.simiLoading = false
+        })
+        this.simiPlaylists = simiPlaylists.playlists
+        this.simiSongs = simiSongs.songs.map((song) => {
+          const {
+            id,
+            name,
+            artists,
+            mvid,
+            album: { picUrl },
+            duration,
+          } = song
+          return createSong({
+            id,
+            name,
+            artists,
+            duration,
+            img: picUrl,
+            mvId: mvid,
+          })
+        })
+      },
+      getPlayerShowCls() {
+        return this.isPlayerShow ? 'show' : 'hide'
+      },
+      getActiveCls(index) {
+        return this.activeLyricIndex === index ? 'active' : ''
+      },
+      getDiscRotateCls() {
+        return this.playing ? 'rotate' : 'pause'
+      },
+      onInitScroller(scoller) {
+        const onScrollStart = (type) => {
+          this.clearTimer(type)
+          this.lyricScrolling[type] = true
+        }
+        const onScrollEnd = (type) => {
+          // 滚动结束后两秒 歌词开始自动滚动
+          this.clearTimer(type)
+          this.lyricTimer[type] = setTimeout(() => {
+            this.lyricScrolling[type] = false
+          }, AUTO_SCROLL_RECOVER_TIME)
+        }
+        scoller.on('scrollStart', onScrollStart.bind(null, SCROLL_TYPE))
+        scoller.on('mousewheelStart', onScrollStart.bind(null, WHEEL_TYPE))
+
+        scoller.on('scrollEnd', onScrollEnd.bind(null, SCROLL_TYPE))
+        scoller.on('mousewheelEnd', onScrollEnd.bind(null, WHEEL_TYPE))
+      },
+      scrollToActiveLyric() {
+        if (this.activeLyricIndex !== -1) {
+          const { scroller, lyric } = this.$refs
+          if (lyric && lyric[this.activeLyricIndex]) {
+            scroller.getScroller().scrollToElement(lyric[this.activeLyricIndex], 200, 0, true)
+          }
+        }
+      },
+      clearTimer(type) {
+        this.lyricTimer[type] && clearTimeout(this.lyricTimer[type])
+      },
+      onClickPlaylist(id) {
+        // 点击的歌单和当前打开的个单页是同一个 直接关闭player
+        if (id === Number(this.$route.params.id)) {
+          this.setPlayerShow(false)
+        } else {
+          this.$router.push(`/playlist/${id}`)
+        }
+      },
+      onClickSong(song) {
+        this.startSong(song)
+        this.addToPlaylist(song)
+      },
+      onGoMv() {
+        this.setPlayerShow(false)
+        goMvWithCheck(this.currentSong.mvId)
+      },
+      resizeScroller: debounce(function () {
+        this.$refs.scroller.getScroller().refresh()
+      }, 500),
+      addResizeListener() {
+        window.addEventListener('resize', this.resizeScroller)
+      },
+      removeResizeListener() {
+        window.removeEventListener('resize', this.resizeScroller)
+      },
+      goTop() {
+        this.$el.scrollTop = 0
+      },
+
+      ...mapMutations(['setPlayerShow']),
+      ...mapActions(['startSong', 'addToPlaylist']),
+    },
+    computed: {
+      activeLyricIndex() {
+        return this.lyricWithTranslation
+          ? this.lyricWithTranslation.findIndex((l, index) => {
+              const nextLyric = this.lyricWithTranslation[index + 1]
+              return this.currentTime >= l.time && (nextLyric ? this.currentTime < nextLyric.time : true)
+            })
+          : -1
+      },
+      lyricWithTranslation() {
+        let ret = []
+        // 空内容的去除
+        const lyricFiltered = this.lyric.filter(({ content }) => Boolean(content))
+        // content统一转换数组形式
+        if (lyricFiltered.length) {
+          lyricFiltered.forEach((l) => {
+            const { time, content } = l
+            const lyricItem = { time, content, contents: [content] }
+            const sameTimeTLyric = this.tlyric.find(({ time: tLyricTime }) => tLyricTime === time)
+            if (sameTimeTLyric) {
+              const { content: tLyricContent } = sameTimeTLyric
+              if (content) {
+                lyricItem.contents.push(tLyricContent)
+              }
+            }
+            ret.push(lyricItem)
+          })
+        } else {
+          ret = lyricFiltered.map(({ time, content }) => ({
+            time,
+            content,
+            contents: [content],
+          }))
+        }
+        return ret
+      },
+
+      ...mapState(['currentSong', 'currentTime', 'playing', 'isPlayerShow', 'isMarqueeOpen']),
+      ...mapGetters(['hasCurrentSong']),
+    },
+    watch: {
+      isPlayerShow(show) {
+        if (show) {
+          this.goTop()
+          // 歌词短期内不会变化 所以只拉取相似信息
+          this.updateSimi()
+          this.addResizeListener()
+          this.$nextTick(() => {
+            this.scrollToActiveLyric()
+          })
+        } else {
+          this.removeResizeListener()
+        }
+      },
+      currentSong(newSong, oldSong) {
+        if (!newSong.id) {
+          this.setPlayerShow(false)
+          return
+        }
+        if (newSong.id === oldSong.id) {
+          return
+        }
+        // 如果歌曲详情显示状态切歌 需要拉取歌曲相关信息
+        if (this.isPlayerShow) {
+          this.goTop()
+          this.updateSong()
+        } else {
+          // 否则只是更新歌词
+          this.updateLyric()
+        }
+      },
+      activeLyricIndex(newIndex, oldIndex) {
+        if (newIndex !== oldIndex && !this.lyricScrolling[WHEEL_TYPE] && !this.lyricScrolling[SCROLL_TYPE]) {
+          this.scrollToActiveLyric()
+        }
+      },
+      $route() {
+        this.setPlayerShow(false)
+      },
+    },
+  }
+</script>
+
+<style lang="scss" scoped>
+  @keyframes rotate {
+    0% {
+      transform: rotate(0);
+    }
+
+    100% {
+      transform: rotate(1turn);
+    }
+  }
+
+  $img-left-padding: 36px;
+  $img-outer-border-d: 320px;
+  $img-outer-d: 300px;
+
+  .player {
+    position: fixed;
+    top: $header-height;
+    bottom: $mini-player-height;
+    left: 0;
+    right: 0;
+    padding: 0 36px;
+    background: $player-bgcolor;
+    z-index: $song-detail-z-index;
+    overflow: hidden;
+    overflow-y: auto;
+    transition: transform 0.5s;
+    min-width: 1300px;
+
+    &.hide {
+      transform: translateY(105%);
+    }
+
+    &.show {
+      transform: none;
+    }
+
+    .background {
+      width: 100%;
+      overflow: hidden;
+
+      img {
+        content: '';
+        height: 50px;
+        width: 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: -1;
+        background-size: cover;
+        filter: blur(80px);
+        transform: scale(3);
+      }
+    }
+
+    .content {
+      max-width: 870px;
+      margin: 0 auto;
+
+      .song {
+        display: flex;
+
+        .left {
+          position: relative;
+          padding: 80px 70px 0 $img-left-padding;
+          display: flex;
+          justify-content: center;
+
+          $support-d: 30px;
+          $support-d-half: calc($support-d / 2);
+          .play-bar-support {
+            position: absolute;
+            left: calc($img-left-padding + $img-outer-border-d / 2 - $support-d / 2);
+            top: -$support-d-half;
+            width: $support-d;
+            height: $support-d;
+            z-index: 2;
+          }
+
+          .play-bar {
+            $w: 100px;
+            $h: 146px;
+            position: absolute;
+            top: 0;
+            left: calc($img-left-padding + $img-outer-border-d / 2 - 6px);
+            width: $w;
+            height: $h;
+            z-index: 1;
+            transform-origin: 0 0;
+            transform: rotate(-30deg);
+            transition: all 0.3s;
+
+            &.playing {
+              transform: rotate(5deg);
+            }
+          }
+
+          .img-outer-border {
+            @include round($img-outer-border-d);
+            @include flex-center;
+            background: $song-shallow-grey-bg;
+
+            .img-outer {
+              @include round($img-outer-d);
+              @include flex-center;
+              background: $black;
+              background: linear-gradient(-45deg, #333540, #070708, #333540);
+              animation: rotate 20s linear infinite;
+
+              &.paused {
+                animation-play-state: paused;
+              }
+
+              .img-wrap {
+                @include img-wrap(200px);
+
+                img {
+                  border-radius: 50%;
+                }
+              }
+            }
+          }
+        }
+
+        .right {
+          flex: 1;
+          padding-top: 45px;
+          .name-wrap {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 16px;
+
+            .name {
+              font-size: $font-size-title-lg;
+              color: $font-color-gray;
+            }
+
+            .marquee-name {
+              width: 400px;
+              font-size: $font-size-title-lg;
+              color: $font-color-gray;
+            }
+
+            .icon-wrap {
+              margin-left: 8px;
+
+              .vip-icon {
+                cursor: default;
+              }
+
+              .hq-icon {
+                cursor: default;
+              }
+
+              .mv-icon {
+                cursor: pointer;
+
+                &:hover {
+                  color: $theme-hover;
+                }
+              }
+            }
+          }
+
+          .alia {
+            width: 400px;
+            font-size: $font-size;
+            color: $font-color-grey-shallow;
+            margin-bottom: 8px;
+            @include text-ellipsis();
+          }
+
+          .desc {
+            display: flex;
+            font-size: $font-size;
+            color: $font-color-grey-shallow;
+            margin-bottom: 50px;
+
+            .desc-item {
+              display: flex;
+              margin-right: 32px;
+              width: 450px;
+              white-space: nowrap;
+
+              .artists {
+                cursor: pointer;
+                white-space: nowrap;
+
+                &:hover {
+                  color: $blue-hover;
+                }
+              }
+
+              .album {
+                cursor: pointer;
+                @include text-ellipsis();
+
+                &:hover {
+                  color: $blue-hover;
+                }
+              }
+            }
+          }
+
+          .lyric-wrap {
+            width: 380px;
+            height: 350px;
+            mask-image: linear-gradient(
+              180deg,
+              hsla(0, 0%, 100%, 0) 0,
+              hsla(0, 0%, 100%, 0.6) 15%,
+              #fff 25%,
+              #fff 75%,
+              hsla(0, 0%, 100%, 0.6) 85%,
+              hsla(0, 0%, 100%, 0)
+            );
+
+            .lyric-block {
+              height: 150px;
+            }
+
+            .lyric-item {
+              margin-bottom: 16px;
+              font-size: $font-size;
+
+              &.active {
+                font-size: $font-size-lg;
+                color: $font-color-gray;
+                font-weight: $font-weight-bold;
+              }
+
+              .lyric-text {
+                margin-bottom: 8px;
+              }
+            }
+          }
+        }
+      }
+
+      .bottom {
+        display: flex;
+        margin-top: 48px;
+        margin-bottom: 36px;
+
+        .left {
+          flex: 1;
+        }
+
+        .right {
+          padding-left: 36px;
+          width: 28%;
+          overflow: hidden;
+
+          .simi-playlists {
+            margin-bottom: 36px;
+          }
+
+          .simi-songs {
+            .play-icon {
+              @include abs-center;
+            }
+          }
+
+          .simi-item {
+            margin-bottom: 6px;
+          }
+
+          .title {
+            font-size: $font-size-lg;
+            font-weight: $font-weight-bold;
+            margin-bottom: 12px;
+          }
+
+          .desc {
+            display: flex;
+            align-items: center;
+
+            .count {
+              margin-left: 4px;
+            }
+          }
+        }
+      }
+    }
+  }
+</style>
