@@ -7,6 +7,18 @@ module.exports = {
   lintOnSave: true, // eslint语法检查
   configureWebpack: {
     devtool: isProd ? false : 'source-map',
+    devServer: {
+      open: true,
+      proxy: {
+        '/netease-api': {
+          target: 'http://localhost:3000',
+          pathRewrite: { '^/netease-api': '' },
+          changeOrigin: true,
+          secure: false,
+        },
+      },
+      port: 8888,
+    },
     externals: isProd
       ? {
           vue: 'Vue',
