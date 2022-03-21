@@ -8,7 +8,8 @@
     <div class="content">
       <div class="name">{{ name }}</div>
       <div class="desc">
-        <slot name="desc">{{ desc }}</slot>
+        {{ desc }}
+        <slot name="desc"></slot>
       </div>
     </div>
   </div>
