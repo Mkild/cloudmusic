@@ -278,9 +278,9 @@
       activeLyricIndex() {
         return this.lyricWithTranslation
           ? this.lyricWithTranslation.findIndex((l, index) => {
-              const nextLyric = this.lyricWithTranslation[index + 1]
-              return this.currentTime >= l.time && (nextLyric ? this.currentTime < nextLyric.time : true)
-            })
+            const nextLyric = this.lyricWithTranslation[index + 1]
+            return this.currentTime >= l.time && (nextLyric ? this.currentTime < nextLyric.time : true)
+          })
           : -1
       },
       lyricWithTranslation() {

@@ -12,6 +12,7 @@ const Mymusic = () => import('@/pages/mymusic') // 我的音乐
 const MenuPlaylistDetail = () => import('@/pages/menu-playlist-detail') // 我的音乐-歌单详情
 const Download = () => import('@/pages/download') // 下载客户端
 const Aside = () => import('@/layout/Aside') // 侧边栏
+const DailyPlaylistDetail = () => import('@/pages/daily-playlist-detail') // 日推歌单详情
 const PlaylistDetail = () => import('@/pages/playlist-detail') // 歌单详情
 const Mv = () => import('@/pages/mv') // MV详情
 const Notfound = () => import('@/pages/notfound') // 404NotFound
@@ -108,6 +109,14 @@ const routes = [
         meta: { index: '/discovery' },
       },
     ],
+  },
+  {
+    path: '/dailyplaylist',
+    name: 'dailyplaylistdetail',
+    components: {
+      main: DailyPlaylistDetail,
+    },
+    meta: { index: '/discovery' },
   },
   {
     path: '/playlist/:id',

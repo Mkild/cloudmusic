@@ -156,7 +156,7 @@
     .logo {
       min-width: 160px;
       margin-left: 20px;
-      margin-right: 50px;
+      margin-right: 80px;
       height: $header-height;
       display: flex;
       align-items: center;

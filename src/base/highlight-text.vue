@@ -20,9 +20,9 @@
               <span class="high-light-text">{hitStr}</span>
               {afterStr}
             </span>
-          ) : (
-            this.text
-          )
+            ) : (
+              this.text
+            )
         return <span>{titleSpan}</span>
       },
     },

@@ -26,10 +26,11 @@ export default {
       }
       const { profile, cookie } = user
       uid = profile.userId
+      const encodeCookie = encodeURIComponent(cookie)
       commit('setUser', profile)
-      commit('setCookie', cookie)
+      commit('setCookie', encodeCookie)
       storage.set(UID_KEY, uid)
-      storage.set(COOKIE_KEY, cookie)
+      storage.set(COOKIE_KEY, encodeCookie)
     } catch (e) {
       return error()
     }

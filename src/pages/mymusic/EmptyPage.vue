@@ -137,7 +137,7 @@
       <span class="title">登录网易云音乐</span>
       <span>查看并管理你收藏的私人音乐，</span>
       <span>方便地随时随地收听</span>
-      <Button @click="openLoginDialog" class="button">立即登录</Button>
+      <NButton @click="openLoginDialog" class="button">立即登录</NButton>
     </div>
     <LoginForm ref="form" />
   </div>
