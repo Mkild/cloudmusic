@@ -240,8 +240,9 @@
     z-index: $select-z-index;
 
     .button {
-      width: 110px;
+      min-width: 110px;
       text-align: center;
+      white-space: nowrap;
       padding: 6px 12px;
       margin-bottom: 16px;
       border: 1px solid #cecece;
