@@ -62,7 +62,7 @@ npm run build  / yarn build
 - **good-storage** [good-storage](https://www.npmjs.com/package/good-storage) 对原生 web storage 的封装，简单好用
 - **lodash-es** [lodash-es](https://www.lodashjs.com) js 模块化工具库 lodash 的 es modules 版本，体积更小
 - **better-scroll** [better-scroll](http://ustbhuangyi.github.io/better-scroll) 用于歌词滚动，这部分代码用的别人的
-- **xgplayer** [xgplayer](https://v2.h5player.bytedance.com/) 西瓜视频播放器，支持按需引入
+- **xgplayer** [xgplayer](https://v2.h5player.bytedance.com) 西瓜视频播放器，支持按需引入
 - **workbox-webpack-plugin** [workbox-webpack-plugin](https://www.lodashjs.com) 谷歌的利用 Service Worker 实现页面预缓存的插件
 
 ## 工程化
