@@ -58,8 +58,11 @@
     }
 
     .nav {
+      width: $discovery-tabs-width;
       position: sticky;
-      top: 0px;
+      top: 0;
+      -ms-transform-origin-y: 40px;
+      -ms-position: fixed;
       z-index: $discovery-nav-z-index;
       background: #ffffff;
       height: 50px;
