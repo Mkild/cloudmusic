@@ -7,7 +7,7 @@
     <a href="https://cn.vuejs.org/v2/guide/"><img src="https://img.shields.io/badge/vue-v2.6.11-blue.svg?color=4FC08D&logo=vuedotjs" alt="vue" /></a>
     <a href="https://cli.vuejs.org/"><img src="https://img.shields.io/badge/vue--cli-v4.5.0-blue.svg?color=3EAF7C" alt="vue-cli" /></a>
     <a href="https://v3.router.vuejs.org/"><img src="https://img.shields.io/badge/vue--router-v3.2.0-blue.svg?color=3EAF7C" alt="vue-router" /></a>
-    <a href="https://v3.vuex.vuejs.org/"><img src="https://img.shields.io/badge/vuex-v3.4.0-yellow.svg?color=3EAF7C" alt="vuex" /></a>
+    <a href="https://v3.vuex.vuejs.org/"><img src="https://img.shields.io/badge/vuex-v3.5.1-yellow.svg?color=3EAF7C" alt="vuex" /></a>
     <a href="https://element.eleme.cn/"><img src="https://img.shields.io/badge/element--ui-v2.15.7-blue.svg?color=409EFF" alt="element-ui" /></a>
     <a href="http://en.sass.hk/"><img src="https://img.shields.io/badge/sass-v1.26.5-blue.svg?color=CC6699&logo=sass" alt="sass" /></a>
     <img src="https://img.shields.io/badge/version-v1.0.0-yellow.svg" alt="version" />
