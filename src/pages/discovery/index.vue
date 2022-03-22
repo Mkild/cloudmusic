@@ -61,8 +61,6 @@
       width: $discovery-tabs-width;
       position: sticky;
       top: 0;
-      -ms-position: fixed;
-      margin-top: 60px\9;
       z-index: $discovery-nav-z-index;
       background: #ffffff;
       height: 50px;
