@@ -167,14 +167,9 @@ $input-height: 24px;
 .user-avatar-menu {
   li {
     &:hover {
+      color: $black !important;
       background-color: $gray !important;
     }
-  }
-}
-
-.el-dropdown-menu__item--divided {
-  &:hover {
-    color: $red !important;
   }
 }
 

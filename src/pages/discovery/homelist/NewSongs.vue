@@ -59,7 +59,7 @@
             album: { blurPicUrl },
             duration,
             fee,
-            privilege: { fl },
+            privilege: { fl, playMaxbr },
           },
         } = song
         return createSong({
@@ -73,6 +73,7 @@
           albumId: album.id,
           mvId: mvid,
           vip: fee,
+          playMaxbr,
           fl,
         })
       },
@@ -80,10 +81,6 @@
         // 这里因为getSongOrder是从1开始显示, 所以当做数组下标需要减一
         const nomalizedSongIndex = this.getSongOrder(listIndex, index) - 1
         const nomalizedSong = this.normalizedSongs[nomalizedSongIndex]
-        if (nomalizedSong.vip == 1) {
-          confirm('你还不是会员，开通会员后再来吧~', '该歌曲为VIP专享')
-          return
-        }
         if (nomalizedSong.fl === 0) {
           confirm('因版权方要求，该资源暂时无法播放', '当前歌曲暂无音源')
           return

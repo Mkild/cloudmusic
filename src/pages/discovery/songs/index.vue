@@ -56,7 +56,7 @@
             duration,
             mvid,
             fee,
-            privilege: { fl },
+            privilege: { fl, maxbr },
             album: { picUrl, name: albumName },
           } = song
           return createSong({
@@ -69,6 +69,7 @@
             img: picUrl,
             mvId: mvid,
             vip: fee,
+            playMaxbr: maxbr,
             fl,
           })
         })
@@ -82,7 +83,7 @@
         })
       },
       playAll() {
-        this.startSong(this.songs.find(({ vip, fl }) => vip !== 1 && fl !== 0))
+        this.startSong(this.songs.find(({ fl }) => fl !== 0))
         this.setPlaylist(this.songs)
       },
 

@@ -8,7 +8,7 @@ import store from '@/store'
 
 export function createSong(song, privilege = []) {
   const { id, name, img, alia, artists, duration, albumId, albumName, mvId, vip, ...rest } = song
-  const { fl } = privilege.find(({ id: songId }) => songId === id) || []
+  const { playMaxbr, fl } = privilege.find(({ id: songId }) => songId === id) || []
 
   return {
     id,
@@ -27,6 +27,10 @@ export function createSong(song, privilege = []) {
     mvId,
     // 会员 为1时表示是会员专享歌曲
     vip,
+    // 最大码率 为0时表示无音源
+    // 等于320000时表示是HQ歌曲
+    // 等于999000时表示是SQ歌曲
+    playMaxbr,
     // 码率 为0时表示无音源
     // 等于320000时表示是HQ歌曲
     fl,
@@ -65,6 +69,7 @@ export async function genSongDetail(id) {
     alia,
     name,
     fee,
+    playMaxbr: privilege.playMaxbr,
     fl: privilege.fl,
   }
 }
