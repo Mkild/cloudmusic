@@ -8,4 +8,7 @@ export default {
   setCookie(state, cookie) {
     state.cookie = cookie
   },
+  setNowPlaylistId(state, id) {
+    state.nowPlaylistId = id
+  },
 }

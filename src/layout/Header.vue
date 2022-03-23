@@ -61,7 +61,7 @@
   import Routes from '@/components/Routes'
   import UserAvatar from '@/components/UserAvatar'
   import { mapState, mapMutations } from '@/store/helper/music'
-  import { mapGetters as mapUserGetters } from '@/store/helper/user'
+  import { mapState as userMapState, mapGetters as userMapGetters } from '@/store/helper/user'
   import { requestFullScreen, exitFullscreen, isFullscreen, isDef } from '@/utils'
 
   export default {
@@ -101,7 +101,9 @@
     },
     computed: {
       mymusicPath() {
-        if (isDef(this.likePlaylistId)) {
+        if (isDef(this.nowPlaylistId)) {
+          return '/mymusic/playlist/' + this.nowPlaylistId
+        } else if (isDef(this.likePlaylistId)) {
           return '/mymusic/playlist/' + this.likePlaylistId
         } else {
           return '/mymusic'
@@ -109,7 +111,8 @@
       },
 
       ...mapState(['isPlayerShow']),
-      ...mapUserGetters(['likePlaylistId']),
+      ...userMapState(['nowPlaylistId']),
+      ...userMapGetters(['likePlaylistId']),
     },
   }
 </script>

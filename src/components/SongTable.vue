@@ -113,8 +113,8 @@
                       </div>
                       {vip !== 1 && alias && !fl ? <span class="alia-ban">({alias})</span> : null}
                       {vip === 1 ? <Icon class="vip-icon" type="vip" color="red" size={20} /> : null}
-                      {playMaxbr === 320000 ? <Icon class="hq-icon" type="hq" color="theme" size={20} /> : null}
-                      {playMaxbr === 999000 ? <Icon class="sq-icon" type="sq" color="theme" size={22} /> : null}
+                      {playMaxbr === 320000 && fl ? <Icon class="hq-icon" type="hq" color="theme" size={20} /> : null}
+                      {playMaxbr === 999000 && fl ? <Icon class="sq-icon" type="sq" color="theme" size={22} /> : null}
                       {mvId ? <Icon class="mv-icon" onClick={onGoMv} type="mv01" color="theme" size={18} /> : null}
                     </div>
 

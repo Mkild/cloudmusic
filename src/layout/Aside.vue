@@ -34,23 +34,21 @@
 </template>
 
 <script>
-  import { mapState as mapUserState, mapGetters as mapUserGetters } from '@/store/helper/user'
+  import { mapState, mapGetters, mapMutations } from '@/store/helper/user'
   import { menuRoutes } from '@/router'
 
   export default {
     name: 'Aside',
     activated() {
-      // 页面进入时跳转相应歌单
-      if (this.path && this.path !== this.$route.path) {
-        this.$router.push(this.path)
-      }
       // 页面进入时设置滚动高度
       this.$refs.menu.scrollTop = this.offsetTop
     },
     beforeRouteLeave(to, from, next) {
       // 组件离开时，保存页面滚动高度
       this.offsetTop = this.$refs.menu.scrollTop
-      this.path = this.$route.path
+      if (this.isLogin) {
+        this.setNowPlaylistId(this.$route.params.id)
+      }
       next()
     },
     data() {
@@ -98,14 +96,16 @@
           document.getElementById(domId).style.display = 'block'
         }
       },
+
+      ...mapMutations(['setNowPlaylistId']),
     },
     computed: {
       // 组合登录后的歌单
       menusWithPlaylist() {
         return this.isLogin && this.userMenus.length ? this.menus.concat(this.userMenus) : this.menus
       },
-      ...mapUserState(['userPlaylist']),
-      ...mapUserGetters(['isLogin', 'userMenus']),
+      ...mapState(['userPlaylist']),
+      ...mapGetters(['isLogin', 'userMenus']),
     },
   }
 </script>

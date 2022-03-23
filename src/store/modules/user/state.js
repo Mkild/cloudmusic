@@ -10,4 +10,6 @@ export default {
   userPlaylist: [],
   // 登录后返回的cookie
   cookie: storage.get(COOKIE_KEY, null),
+  // 用户正在浏览的歌单id
+  nowPlaylistId: null,
 }

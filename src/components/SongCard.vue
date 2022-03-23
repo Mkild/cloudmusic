@@ -13,8 +13,8 @@
       </p>
       <p class="singer-content">
         <Icon v-if="vip === 1" class="vip-icon" type="vip" color="red" :size="20" />
-        <Icon v-if="playMaxbr === 320000" class="hq-icon" type="hq" color="theme" :size="20" />
-        <Icon v-if="playMaxbr === 999000" class="sq-icon" type="sq" color="theme" :size="22" />
+        <Icon v-if="playMaxbr === 320000 && fl" class="hq-icon" type="hq" color="theme" :size="20" />
+        <Icon v-if="playMaxbr === 999000 && fl" class="sq-icon" type="sq" color="theme" :size="22" />
         <Icon v-if="mvId" class="mv-icon" @click.stop="onGoMv" type="mv01" color="theme" :size="18" />
         <span class="singer">{{ artistsText }}</span>
       </p>
