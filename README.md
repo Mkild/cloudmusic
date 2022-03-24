@@ -24,6 +24,8 @@
 
 一个平平无奇的低仿网易云，有待补完。
 
+> **用的 CDN：** [BootCDN](https://www.bootcdn.cn/)
+
 > **项目预览（部署在 Vercel 上，速度较慢）：** [cloudmusic](https://cloudmusic-mkild.vercel.app)
 
 > **接口指路：** [NeteaseCloudMusicApi](https://github.com/Binaryify/NeteaseCloudMusicApi)
