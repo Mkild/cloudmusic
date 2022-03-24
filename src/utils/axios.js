@@ -4,7 +4,7 @@ import { confirm } from '@/base/confirm'
 import store from '@/store'
 
 // 备用：https://netease-cloud-music-api-mkild.vercel.app/
-let BASE_URL = 'http://106.55.228.168:3000/'
+let BASE_URL = 'localhost:3000/'
 // 不带全局loading的请求实例
 export const requestWithoutLoading = createBaseInstance()
 
