@@ -24,7 +24,7 @@
 
 一个平平无奇的低仿网易云，有待补完。
 
-> **用的 CDN：** [BootCDN](https://www.bootcdn.cn/)
+> **所用 CDN：** [BootCDN](https://www.bootcdn.cn/)
 
 > **项目预览（部署在 Vercel 上，速度较慢）：** [cloudmusic](https://cloudmusic-mkild.vercel.app)
 
@@ -81,14 +81,14 @@ npm run build  / yarn build
 
 ## 快照
 
-![image.png](https://i.imgur.com/UGiyqKx.png)
+![image.png](https://i.imgur.com/NrtGn9C.png)
 
 ![image.png](https://i.imgur.com/wHgS4Vd.png)
 
 ![image.png](https://i.imgur.com/ZI0JNNc.png)
 
-![image.png](https://i.imgur.com/xz7RfWe.png)
+![image.png](https://i.imgur.com/y7qvht4.png)
 
-![image.png](https://i.imgur.com/KVnXlog.png)
+![image.png](https://i.imgur.com/cRpOP46.png)
 
 ![image.png](https://i.imgur.com/DIHMoJ0.png)
