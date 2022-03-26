@@ -5,6 +5,7 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
+    "build:vercel": "vue-cli-service build --mode vercel",
     "lint": "vue-cli-service lint",
     "fix": "eslint --fix ./src",
     "prettier": "prettier --write ./src",

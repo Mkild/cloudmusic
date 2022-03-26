@@ -3,8 +3,13 @@ import { Loading } from 'element-ui'
 import { confirm } from '@/base/confirm'
 import store from '@/store'
 
-// 备用：https://netease-cloud-music-api-mkild.vercel.app/
-const BASE_URL = 'http://106.55.228.168:3000/'
+let BASE_URL
+if (process.env.NODE_ENV === 'production' && process.env.VUE_APP_CURRENTMODE === 'vercel') {
+  BASE_URL = process.env.VUE_APP_BASE_URL
+} else {
+  BASE_URL = 'http://106.55.228.168:3000/'
+}
+
 // 不带全局loading的请求实例
 export const requestWithoutLoading = createBaseInstance()
 
