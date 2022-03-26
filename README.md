@@ -26,7 +26,9 @@
 
 > **所用 CDN：** [BootCDN](https://www.bootcdn.cn/)
 
-> **项目预览（部署在 Vercel 上，速度较慢）：** [cloudmusic](https://cloudmusic-mkild.vercel.app)
+> **项目预览**
+> 部署在 Vercel 上，速度较慢： [cloudmusic](https://cloudmusic-mkild.vercel.app)  
+> 仅国内可访问：[cloudmusic](http://106.55.228.168)
 
 > **接口指路：** [NeteaseCloudMusicApi](https://github.com/Binaryify/NeteaseCloudMusicApi)
 
