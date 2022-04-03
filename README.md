@@ -24,7 +24,7 @@
 
 一个平平无奇的低仿网易云，有待补完。
 
-> **所用 CDN：** [BootCDN](https://www.bootcdn.cn/)
+> **所用 CDN：** [75CDN](https://cdn.baomitu.com/)
 
 > **项目预览**
 > 部署在 Vercel 上，速度较慢： [cloudmusic](https://cloudmusic-mkild.vercel.app)  
