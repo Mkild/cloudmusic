@@ -1,21 +1,21 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 
-const Discovery = () => import('@/pages/discovery') // 首页-发现音乐
-const Homelist = () => import('@/pages/discovery/homelist') //  首页-发现音乐-个性推荐
-const Playlists = () => import('@/pages/discovery/playlists') //  首页-发现音乐-歌单
-const Toplists = () => import('@/pages/discovery/toplists') //  首页-发现音乐-排行榜
-const Songs = () => import('@/pages/discovery/songs') //  首页-发现音乐-最新音乐
-const Albums = () => import('@/pages/discovery/albums') //  首页-发现音乐-新碟上架
-const Mvs = () => import('@/pages/discovery/mvs') // 首页-发现音乐-MV
-const Mymusic = () => import('@/pages/mymusic') // 我的音乐
-const MenuPlaylistDetail = () => import('@/pages/menu-playlist-detail') // 我的音乐-歌单详情
-const Download = () => import('@/pages/download') // 下载客户端
-const Aside = () => import('@/layout/Aside') // 侧边栏
-const DailyPlaylistDetail = () => import('@/pages/daily-playlist-detail') // 日推歌单详情
-const PlaylistDetail = () => import('@/pages/playlist-detail') // 歌单详情
-const Mv = () => import('@/pages/mv') // MV详情
-const Notfound = () => import('@/pages/notfound') // 404NotFound
+const Discovery = () => import(/* webpackChunkName: "Discovery" */ '@/pages/discovery') // 首页-发现音乐
+const Homelist = () => import(/* webpackChunkName: "Discovery" */ '@/pages/discovery/homelist') //  首页-发现音乐-个性推荐
+const Playlists = () => import(/* webpackChunkName: "Discovery" */ '@/pages/discovery/playlists') //  首页-发现音乐-歌单
+const Toplists = () => import(/* webpackChunkName: "Discovery" */ '@/pages/discovery/toplists') //  首页-发现音乐-排行榜
+const Songs = () => import(/* webpackChunkName: "Discovery" */ '@/pages/discovery/songs') //  首页-发现音乐-最新音乐
+const Albums = () => import(/* webpackChunkName: "Discovery" */ '@/pages/discovery/albums') //  首页-发现音乐-新碟上架
+const Mvs = () => import(/* webpackChunkName: "Discovery" */ '@/pages/discovery/mvs') // 首页-发现音乐-MV
+const Mymusic = () => import(/* webpackChunkName: "Mymusic" */ '@/pages/mymusic') // 我的音乐
+const MenuPlaylistDetail = () => import(/* webpackChunkName: "Mymusic" */ '@/pages/menu-playlist-detail') // 我的音乐-歌单详情
+const Download = () => import(/* webpackChunkName: "Download" */ '@/pages/download') // 下载客户端
+const Aside = () => import(/* webpackChunkName: "Aside" */ '@/layout/Aside') // 侧边栏
+const DailyPlaylistDetail = () => import(/* webpackChunkName: "DailyPlaylistDetail" */ '@/pages/daily-playlist-detail') // 日推歌单详情
+const PlaylistDetail = () => import(/* webpackChunkName: "PlaylistDetail" */ '@/pages/playlist-detail') // 歌单详情
+const Mv = () => import(/* webpackChunkName: "Mv" */ '@/pages/mv') // MV详情
+const Notfound = () => import(/* webpackChunkName: "NotFound" */ '@/pages/notfound') // 404NotFound
 
 Vue.use(VueRouter)
 

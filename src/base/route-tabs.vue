@@ -39,6 +39,19 @@
         <span class="title">{{ tab.title }}</span>
       </li>
     </template>
+    <!-- album -->
+    <template v-if="tabType === 'album'">
+      <li
+        :class="getItemCls(tab, index)"
+        :key="tab.id"
+        :style="getItemStyle(tab, index)"
+        @click="onChangeTabAlbum(tab)"
+        class="tab-item"
+        v-for="(tab, index) in tabs"
+      >
+        <span class="title">{{ tab.title }}</span>
+      </li>
+    </template>
   </ul>
 </template>
 
@@ -57,7 +70,9 @@
       },
       // 必须传
       // playlist对应精品歌单
+      // song对应最新音乐
       // mv对应全部MV
+      // album对应新碟上架
       tabType: {
         type: String,
         require: true,
@@ -137,6 +152,9 @@
           })
         }
       },
+      onChangeTabAlbum(tab) {
+        this.$emit(ACTIVE_CHANGE, tab.area)
+      },
       isActivePlaylist(tab) {
         const cat = this.$route.query.cat
         if (isDef(cat)) {
@@ -181,6 +199,14 @@
           }
         }
       },
+      isActiveAlbum(tab) {
+        const area = this.$route.query.area
+        if (isDef(area)) {
+          return tab.area == area
+        } else {
+          return tab.area === this[ACTIVE_PROP]
+        }
+      },
       isActive(tab) {
         if (this.tabType === 'playlist') {
           return this.isActivePlaylist(tab)
@@ -190,6 +216,9 @@
         }
         if (this.tabType === 'mv') {
           return this.isActiveMv(tab)
+        }
+        if (this.tabType === 'album') {
+          return this.isActiveAlbum(tab)
         }
       },
       getItemCls(tab, index) {

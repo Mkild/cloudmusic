@@ -1,7 +1,7 @@
 <template>
   <div class="user-avatar">
     <div class="user">
-      <div v-if="!isLogin" class="avatar" @click="openLoginDialog">
+      <div v-if="!isLogin" class="avatar" @click="openDialog">
         <el-avatar><Icon type="avatar" :size="28" /></el-avatar>
         <span class="username">未登录</span>
         <Icon type="arrowdownb" :size="12" />
@@ -20,20 +20,17 @@
         </template>
       </el-dropdown>
     </div>
-    <LoginForm ref="form" />
   </div>
 </template>
 
 <script>
   import { confirm } from '@/base/confirm'
-  import LoginForm from '@/components/LoginForm'
   import { mapActions, mapState, mapGetters } from '@/store/helper/user'
   import storage from 'good-storage'
   import { UID_KEY, isDef } from '@/utils'
 
   export default {
     name: 'UserAvatar',
-    components: { LoginForm },
     // 自动登录
     created() {
       const uid = storage.get(UID_KEY)
@@ -47,11 +44,8 @@
       }
     },
     methods: {
-      openLoginDialog() {
-        this.$refs.form.onOpenDialog()
-      },
-      closeLoginDialog() {
-        this.$refs.form.onCloseDialog()
+      openDialog() {
+        this.openLoginDialog()
       },
       async autoLogin(uid) {
         this.loading = true

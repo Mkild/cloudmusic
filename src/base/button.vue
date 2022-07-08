@@ -31,7 +31,8 @@
     cursor: pointer;
 
     &:hover {
-      background: $button-hover-bgcolor;
+      color: #ffffff;
+      background-color: $button-hover-bgcolor;
     }
   }
 </style>

@@ -136,6 +136,10 @@ export function isTel(v) {
   return /^1[3,4,5,6,7,8,9][0-9]{9}$/.test(v.toString())
 }
 
+export function isCode(v) {
+  return /^[0-9]{4}$/.test(v.toString())
+}
+
 export function isEmail(v) {
   return /^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/.test(v)
 }

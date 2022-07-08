@@ -139,21 +139,12 @@
       <span>方便地随时随地收听</span>
       <NButton @click="openLoginDialog" class="button">立即登录</NButton>
     </div>
-    <LoginForm ref="form" />
   </div>
 </template>
 
 <script>
-  import LoginForm from '@/components/LoginForm'
-
   export default {
     name: 'EmptyPage',
-    components: { LoginForm },
-    methods: {
-      openLoginDialog() {
-        this.$refs.form.onOpenDialog()
-      },
-    },
   }
 </script>
 

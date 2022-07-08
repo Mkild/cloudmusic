@@ -21,6 +21,7 @@ import {
   Tooltip,
   Form,
   FormItem,
+  InfiniteScroll,
 } from 'element-ui'
 import VueLazyload from 'vue-lazyload'
 import VueMeta from 'vue-meta'
@@ -64,6 +65,7 @@ export default {
     Vue.use(Tooltip)
     Vue.use(Form)
     Vue.use(FormItem)
+    Vue.use(InfiniteScroll)
 
     Vue.use(VueMeta)
 

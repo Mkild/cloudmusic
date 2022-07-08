@@ -151,6 +151,7 @@ $input-height: 24px;
 // dialog
 .el-dialog {
   background: $modal-bg-color !important;
+  min-width: 400px;
   @include box-shadow;
 
   .el-dialog__body {
@@ -180,8 +181,13 @@ $input-height: 24px;
 
 // button
 .el-button--primary {
-  background: $theme-color !important;
+  background-color: $theme-color !important;
   border-color: $theme-color !important;
+
+  &:hover {
+    background-color: #9645ff !important;
+    border-color: #9645ff !important;
+  }
 }
 
 // loading

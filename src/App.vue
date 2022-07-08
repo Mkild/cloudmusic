@@ -12,6 +12,7 @@
     <MiniPlayer />
     <Playlist />
     <ShareReader />
+    <LoginDialog ref="dialog" />
   </div>
 </template>
 
@@ -21,14 +22,21 @@
   import MiniPlayer from '@/components/MiniPlayer'
   import Playlist from '@/components/Playlist'
   import ShareReader from '@/components/ShareReader'
+  import LoginDialog from './components/LoginDialog'
+  import Vue from 'vue'
 
   export default {
     name: 'App',
-    components: { Header, MiniPlayer, Playlist, Player, ShareReader },
+    components: { Header, MiniPlayer, Playlist, Player, ShareReader, LoginDialog },
     metaInfo() {
       return {
         title: '网易云音乐',
       }
+    },
+    mounted() {
+      // 将开启和关闭登录弹窗的方法绑定到原型上
+      Vue.prototype.openLoginDialog = this.$refs.dialog.onOpenDialog
+      Vue.prototype.closeLoginDialog = this.$refs.dialog.onCloseDialog
     },
   }
 </script>
