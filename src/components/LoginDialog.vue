@@ -306,7 +306,7 @@
         })
       },
 
-      ...mapActions(['login', 'loginByQr', 'loginByUid', 'logout']),
+      ...mapActions(['login', 'loginByQr', 'logout']),
       ...mapMusicMutations(['setInputFocus']),
     },
     computed: {

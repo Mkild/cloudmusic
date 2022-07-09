@@ -27,7 +27,7 @@
   import { confirm } from '@/base/confirm'
   import { mapActions, mapState, mapGetters } from '@/store/helper/user'
   import storage from 'good-storage'
-  import { UID_KEY, isDef } from '@/utils'
+  import { UID_KEY, VISITOR_COOKIE_KEY, isDef, isUndef } from '@/utils'
 
   export default {
     name: 'UserAvatar',
@@ -36,6 +36,11 @@
       const uid = storage.get(UID_KEY)
       if (isDef(uid)) {
         this.autoLogin(uid)
+        return
+      }
+      const visitorCookie = storage.get(VISITOR_COOKIE_KEY)
+      if (isUndef(visitorCookie)) {
+        this.loginForVisitor()
       }
     },
     data() {
@@ -62,7 +67,7 @@
         })
       },
 
-      ...mapActions(['loginByUid', 'logout']),
+      ...mapActions(['loginForVisitor', 'loginByUid', 'logout']),
     },
     computed: {
       ...mapState(['user']),

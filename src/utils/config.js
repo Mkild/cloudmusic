@@ -31,6 +31,9 @@ export const PLAY_HISTORY_KEY = '__play_history__'
 // 用户id
 export const UID_KEY = '__uid__'
 
+// 访客cookie
+export const VISITOR_COOKIE_KEY = '__visitor_cookie__'
+
 // 登录后返回的cookie
 export const COOKIE_KEY = '__cookie__'
 

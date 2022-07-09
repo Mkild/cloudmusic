@@ -2,6 +2,11 @@ import { requestWithoutLoading } from '@/utils'
 import { requestWithoutLoadingVercel } from '@/utils/vercelaxios'
 import qs from 'qs'
 
+// 访客登录(获取访客cookie避免报错)
+export const visitorLogin = () => {
+  return requestWithoutLoadingVercel.get('/register/anonimous')
+}
+
 // 手机登录
 export const loginByPhone = (phone, md5_password) => {
   return requestWithoutLoadingVercel.post(
@@ -32,12 +37,12 @@ export const loginByEmail = (email, md5_password) => {
 
 // 生成二维码key
 export const getQrKey = () => {
-  return requestWithoutLoading.get('/login/qr/key')
+  return requestWithoutLoading.get(`/login/qr/key?timestamp=${Date.now()}`)
 }
 
 // 生成二维码
 export const getQr = (key) => {
-  return requestWithoutLoading.get(`/login/qr/create?key=${key}`)
+  return requestWithoutLoading.get(`/login/qr/create?key=${key}&timestamp=${Date.now()}`)
 }
 
 /* 检测二维码扫码状态
@@ -48,7 +53,7 @@ export const checkQrStatus = (key) => {
 }
 
 // 获取登录状态
-export const getLoginStatus = (cookie) => requestWithoutLoading.get(`/login/status?cookie=${cookie}`)
+export const getLoginStatus = (cookie) => requestWithoutLoadingVercel.get(`/login/status?cookie=${cookie}`)
 
 // 刷新登录状态
 export const refreshLogin = () => requestWithoutLoading.get('/login/refresh')

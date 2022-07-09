@@ -8,6 +8,9 @@ export default {
   setUserPlaylist(state, playlist) {
     state.userPlaylist = playlist
   },
+  setVisitorCookie(state, visitorCookie) {
+    state.visitorCookie = visitorCookie
+  },
   setCookie(state, cookie) {
     state.cookie = cookie
   },

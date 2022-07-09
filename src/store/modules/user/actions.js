@@ -1,10 +1,18 @@
 import storage from 'good-storage'
 import md5 from 'js-md5'
-import { UID_KEY, COOKIE_KEY } from '@/utils'
+import { UID_KEY, VISITOR_COOKIE_KEY, COOKIE_KEY } from '@/utils'
 import { notify, isUndef, sleep } from '@/utils'
-import { loginByPhone, loginByCaptcha, checkQrStatus, getLoginStatus, getUserDetail, getUserPlaylist } from '@/api'
+import * as api from '@/api'
 
 export default {
+  // 访客登录
+  async loginForVisitor({ commit }) {
+    const res = await api.visitorLogin()
+    const encodeCookie = encodeURIComponent(res.cookie)
+    commit('setVisitorCookie', encodeCookie)
+    storage.set(VISITOR_COOKIE_KEY, encodeCookie)
+  },
+
   // 使用手机号登录 isCodeLogin: 是否使用验证码方式
   async login({ commit }, formData, isCodeLogin = true) {
     const error = () => {
@@ -27,10 +35,10 @@ export default {
     try {
       let user
       if (isCodeLogin) {
-        user = await loginByCaptcha(phone, code)
+        user = await api.loginByCaptcha(phone, code)
       } else {
         const md5_password = md5(password)
-        user = await loginByPhone(phone, md5_password)
+        user = await api.loginByPhone(phone, md5_password)
       }
       if (!user) {
         return error()
@@ -43,7 +51,7 @@ export default {
       storage.set(UID_KEY, uid)
       storage.set(COOKIE_KEY, encodeCookie)
 
-      const { playlist } = await getUserPlaylist(uid)
+      const { playlist } = await api.getUserPlaylist(uid)
       commit('setUserPlaylist', playlist)
       return true
     } catch (e) {
@@ -55,14 +63,14 @@ export default {
   // 使用二维码登录
   async loginByQr({ commit }, key) {
     try {
-      const res = await checkQrStatus(key)
+      const res = await api.checkQrStatus(key)
       if (res.code === 800) {
         notify.error('二维码已过期,请重新获取')
         return false
       }
       if (res.code === 803) {
         const encodeCookie = encodeURIComponent(res.cookie)
-        const statusRes = await getLoginStatus(encodeCookie)
+        const statusRes = await api.getLoginStatus(encodeCookie)
         if (isUndef(statusRes)) {
           notify.error('登录失败')
           return false
@@ -73,7 +81,7 @@ export default {
         storage.set(UID_KEY, uid)
         storage.set(COOKIE_KEY, encodeCookie)
 
-        const { playlist } = await getUserPlaylist(uid)
+        const { playlist } = await api.getUserPlaylist(uid)
         commit('setUserPlaylist', playlist)
         return true
       }
@@ -95,7 +103,7 @@ export default {
     }
 
     try {
-      const user = await getUserDetail(uid)
+      const user = await api.getUserDetail(uid)
       const { profile } = user
       commit('setUser', profile)
       storage.set(UID_KEY, profile.userId)
@@ -103,7 +111,7 @@ export default {
       return error()
     }
 
-    const { playlist } = await getUserPlaylist(uid)
+    const { playlist } = await api.getUserPlaylist(uid)
     commit('setUserPlaylist', playlist)
     /* 阻塞执行，防止太快return导致getters还未获取到store
     不阻塞可能会导致用户进入《我的音乐》拿不到用户喜欢的音乐歌单id实现跳转 */

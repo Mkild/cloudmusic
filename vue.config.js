@@ -1,7 +1,8 @@
 /* eslint-disable indent */
-const WorkboxWebpackPlugin = require('workbox-webpack-plugin')
-
 const isProd = process.env.NODE_ENV === 'production'
+
+let WorkboxWebpackPlugin
+if (isProd) WorkboxWebpackPlugin = require('workbox-webpack-plugin')
 
 module.exports = {
   lintOnSave: true, // eslint语法检查
@@ -15,12 +16,14 @@ module.exports = {
           axios: 'axios',
         }
       : {},
-    plugins: [
-      new WorkboxWebpackPlugin.GenerateSW({
-        clientsClaim: true,
-        skipWaiting: true,
-      }),
-    ],
+    plugins: isProd
+      ? [
+          new WorkboxWebpackPlugin.GenerateSW({
+            clientsClaim: true,
+            skipWaiting: true,
+          }),
+        ]
+      : [],
   },
   css: {
     loaderOptions: {

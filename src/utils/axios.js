@@ -51,6 +51,15 @@ function handleRequest(request) {
       cookie,
       ...request.params,
     }
+  } else {
+    const visitorCookie = store.state.user.visitorCookie
+    if (visitorCookie) {
+      // 设置访客cookie
+      request.params = {
+        cookie: visitorCookie,
+        ...request.params,
+      }
+    }
   }
   return request
 }
